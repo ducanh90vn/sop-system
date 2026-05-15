@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase'
 import { Worker, Viewer } from '@react-pdf-viewer/core'
 import '@react-pdf-viewer/core/lib/styles/index.css'
 
-export default function StationPage() {
+export default function StationPage({ onLogout }) {
   const [myPosition, setMyPosition] = useState(null)  // do người dùng chọn
   const [pdfUrl, setPdfUrl] = useState(null)
   const [activeModelId, setActiveModelId] = useState(null)
@@ -81,9 +81,18 @@ export default function StationPage() {
         </div>
       ) : (
         <>
-          <div style={{ padding: '8px 16px', background: '#f5f5f5', display: 'flex', gap: 16 }}>
+          <div style={{ padding: '8px 16px', background: '#f5f5f5', display: 'flex', gap: 16, justifyContent: 'space-between', alignItems: 'center' }}>
             <span>Trạm: <b>Vị trí {myPosition}</b></span>
             <button onClick={() => setMyPosition(null)}>Đổi vị trí</button>
+            <button
+              onClick={onLogout}
+              style={{
+                padding: '6px 12px', background: '#dc2626', color: '#fff',
+                border: 'none', borderRadius: 4, fontSize: 12, cursor: 'pointer'
+              }}
+            >
+              Đăng xuất
+            </button>
           </div>
 
           {pdfUrl ? (
