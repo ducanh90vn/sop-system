@@ -14,23 +14,19 @@ export default function LoginPage({ onLogin }) {
     setError('')
 
     try {
-      // Giả lập đăng nhập với dữ liệu mẫu (tạm thời)
-      const mockUsers = [
-        { id: 1, username: 'admin', password: 'admin123', role: 'admin' },
-        { id: 2, username: 'editor', password: 'editor123', role: 'editor' },
-        { id: 3, username: 'leader', password: 'leader123', role: 'leader' },
-        { id: 4, username: 'op', password: 'op123', role: 'op' }
-      ]
+      const { data, error } = await supabase
+        .from('users')
+        .select('id, username, role')
+        .eq('username', username)
+        .eq('password', password)
+        .single()
 
-      const user = mockUsers.find(u => u.username === username && u.password === password)
-
-      if (!user) {
+      if (error || !data) {
         setError('Tên đăng nhập hoặc mật khẩu không đúng')
         return
       }
 
-      // Lưu thông tin user vào localStorage (không lưu password)
-      const userData = { id: user.id, username: user.username, role: user.role }
+      const userData = { id: data.id, username: data.username, role: data.role }
       localStorage.setItem('user', JSON.stringify(userData))
       onLogin(userData)
     } catch (err) {
